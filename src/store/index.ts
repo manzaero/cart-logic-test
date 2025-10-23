@@ -18,8 +18,11 @@ interface State {
     location: Location | null;
 }
 
+const savedProducts = localStorage.getItem('products');
+const initialProducts = savedProducts ? JSON.parse(savedProducts) : [];
+
 const initialState: State = {
-    products: [],
+    products: initialProducts,
     cart: [],
     location: null,
 };
@@ -29,21 +32,21 @@ const productsSlice = createSlice({
     initialState,
     reducers: {
         setLocation: (state, action: PayloadAction<Location>) => {
-            console.log('Setting location in reducer:', action.payload);
             state.location = action.payload;
-            if (action.payload.country_code === 'ES' && action.payload.city === 'Madrid') {
-                state.products = [
-                    { id: 1, name: 'Jamón Ibérico', price: 25 },
-                    { id: 2, name: 'Paella Kit', price: 15 },
-                    { id: 3, name: 'Spanish Olive Oil', price: 10 },
-                ];
-            } else {
-                state.products = [
-                    { id: 1, name: 'Generic Product 1', price: 10 },
-                    { id: 2, name: 'Generic Product 2', price: 20 },
-                ];
+            if (state.products.length === 0) {
+                if (action.payload.country_code === 'ES' && action.payload.city === 'Madrid') {
+                    state.products = [
+                        { id: 1, name: 'Jamón Ibérico', price: 25 },
+                        { id: 2, name: 'Paella Kit', price: 15 },
+                        { id: 3, name: 'Spanish Olive Oil', price: 10 },
+                    ];
+                } else {
+                    state.products = [
+                        { id: 1, name: 'Generic Product 1', price: 10 },
+                        { id: 2, name: 'Generic Product 2', price: 20 },
+                    ];
+                }
             }
-            console.log('Updated products:', state.products);
         },
         addToCart: (state, action: PayloadAction<Product>) => {
             state.cart.push(action.payload);
@@ -53,12 +56,17 @@ const productsSlice = createSlice({
         },
         addProduct: (state, action: PayloadAction<Product>) => {
             state.products.push(action.payload);
-        }
+            localStorage.setItem('products', JSON.stringify(state.products));
+        },
+        removeProduct: (state, action: PayloadAction<number>) => {
+            state.products = state.products.filter(p => p.id !== action.payload);
+            localStorage.setItem('products', JSON.stringify(state.products));
+        },
     },
 });
 
-export const { setLocation, addToCart, removeFromCart, addProduct } = productsSlice.actions;
-export default productsSlice.reducer;
+export const { setLocation, addToCart, removeFromCart, addProduct, removeProduct } =
+    productsSlice.actions;
 
 export const store = configureStore({
     reducer: productsSlice.reducer,

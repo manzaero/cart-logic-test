@@ -8,7 +8,7 @@ export const App: React.FC = () => {
             <Routes>
                 <Route path="/" element={<Main />} />
                 <Route path="/products/:id" element={<ProductPage />} />
-                <Route path="/create-product" element={<CreateProduct />} />
+                <Route path="/create-product" element={<CreateProduct title="Создать продукт" />} />
             </Routes>
         </Router>
     );

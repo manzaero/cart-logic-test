@@ -4,6 +4,10 @@ import { useDispatch } from 'react-redux';
 import { addProduct } from '../../store';
 import { useNavigate } from 'react-router-dom';
 
+interface CreateProductProps {
+    title: string;
+}
+
 const Wrapper = styled.div`
   max-width: 500px;
   margin: 40px auto;
@@ -41,7 +45,7 @@ const Error = styled.p`
   font-size: 14px;
 `;
 
-export const CreateProduct: React.FC = () => {
+export const CreateProduct: React.FC<CreateProductProps> = ({ title }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [name, setName] = useState('');
@@ -61,19 +65,21 @@ export const CreateProduct: React.FC = () => {
             return;
         }
 
-        dispatch(addProduct({
-            id: Date.now(),
-            name,
-            price: priceValue,
-            description
-        }));
+        dispatch(
+            addProduct({
+                id: Date.now(),
+                name,
+                price: priceValue,
+                description,
+            })
+        );
 
         navigate('/');
     };
 
     return (
         <Wrapper>
-            <h2>Создать продукт</h2>
+            <h2>{title}</h2>
             <form onSubmit={handleSubmit}>
                 <Input
                     placeholder="Название"
