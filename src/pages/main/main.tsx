@@ -89,7 +89,7 @@ export const Main: React.FC = () => {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
             />
-            <Card title="Available Products" products={currentProducts} />
+            <Card title="Продукты" products={currentProducts} />
             <div>Всего продуктов: {filtered.length}</div>
             <PaginationWrapper>
                 {Array.from({ length: totalPages }, (_, i) => (

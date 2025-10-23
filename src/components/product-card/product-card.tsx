@@ -16,13 +16,31 @@ interface ProductCardProps {
     liked: boolean;
 }
 
+const EditButton = styled.button`
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #e6e6e6;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+`;
+
 const CardContainer = styled.div`
   background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 16px;
   margin: 10px;
-  width: 200px;
+  width: 300px;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
@@ -76,9 +94,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <p>${product.price}</p>
             <ButtonsWrapper>
                 <Button active={liked} onClick={() => onToggleLike(product.id)}>
-                    {liked ? 'Unlike' : 'Like'}
+                    {liked ? 'дизлайк' : 'лайк'}
                 </Button>
-                <Button onClick={() => onDelete(product.id)}>Delete</Button>
+                <Button onClick={() => onDelete(product.id)}>Удалить</Button>
+                <EditButton onClick={() => navigate(`/edit-product/${product.id}`)}>
+                    Редактировать
+                </EditButton>
             </ButtonsWrapper>
         </CardContainer>
     );
