@@ -5,7 +5,7 @@ import { addProduct, type AppDispatch } from '../../store';
 import { useNavigate } from 'react-router-dom';
 
 interface CreateProductProps {
-    initialName?: string;
+    title?: string;
 }
 
 const Wrapper = styled.div`
@@ -45,13 +45,13 @@ const Error = styled.p`
     font-size: 14px;
 `;
 
-export const CreateProduct: React.FC<CreateProductProps> = ({ initialName = '' }) => {
+export const CreateProduct: React.FC<CreateProductProps> = ({ title = 'Создать продукт' }) => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const [name, setName] = useState(initialName);
-    const [price, setPrice] = useState('');
-    const [description, setDescription] = useState('');
-    const [error, setError] = useState('');
+    const [name, setName] = useState<string>('');
+    const [price, setPrice] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [error, setError] = useState<string>('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -64,6 +64,7 @@ export const CreateProduct: React.FC<CreateProductProps> = ({ initialName = '' }
             setError('Цена должна быть положительным числом');
             return;
         }
+
         dispatch(
             addProduct({
                 id: Date.now(),
@@ -72,27 +73,28 @@ export const CreateProduct: React.FC<CreateProductProps> = ({ initialName = '' }
                 description,
             })
         );
+
         navigate('/');
     };
 
     return (
         <Wrapper>
-            <h2>Создание продукта</h2>
+            <h2>{title}</h2>
             <form onSubmit={handleSubmit}>
                 <Input
                     placeholder="Название"
                     value={name}
-                    onChange={e => setName(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                 />
                 <Input
                     placeholder="Цена"
                     value={price}
-                    onChange={e => setPrice(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrice(e.target.value)}
                 />
                 <TextArea
                     placeholder="Описание"
                     value={description}
-                    onChange={e => setDescription(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
                 />
                 {error && <Error>{error}</Error>}
                 <Button type="submit">Создать</Button>
