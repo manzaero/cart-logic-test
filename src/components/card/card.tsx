@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { type RootState, type AppDispatch, addToCart, removeFromCart, removeProduct } from '../../store';
+import { type RootState, type AppDispatch, addToCart, removeFromCart, removeProduct, type Product } from '../../store';
 import { ProductCard } from '../product-card/product-card';
 
 interface CardProps {
@@ -84,7 +84,7 @@ export const Card: React.FC<CardProps> = ({ title, products }) => {
                 {displayedProducts.length > 0 ? (
                     displayedProducts.map(product => (
                         <ProductCard
-                            key={product.id}
+                            key={product.id.toString()}
                             product={product}
                             liked={cart.some(item => item.id === product.id)}
                             onDelete={handleDelete}

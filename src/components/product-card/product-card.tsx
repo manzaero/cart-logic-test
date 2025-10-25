@@ -1,19 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-
-interface Product {
-    id: number;
-    name: string;
-    price: number;
-    description?: string;
-}
+import { type Product } from '../../store';
 
 interface ProductCardProps {
     product: Product;
     onDelete: (id: number) => void;
     onToggleLike: (id: number) => void;
     liked: boolean;
+    key?: React.Key;
 }
 
 const EditButton = styled.button`

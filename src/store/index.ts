@@ -1,18 +1,18 @@
 import { configureStore, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-interface Product {
+export interface Product {
     id: number;
     name: string;
     price: number;
     description?: string;
 }
 
-interface Location {
+export interface Location {
     country_code: string;
     city: string;
 }
 
-interface State {
+export interface State {
     products: Product[];
     cart: Product[];
     location: Location | null;
