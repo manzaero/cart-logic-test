@@ -1,4 +1,4 @@
-export * from './main/main'
-export * from './product/product-page'
-export * from './create/create-product'
-export * from './edit/edit-product'
+export { CreateProduct } from './create/create-product';
+export { EditProduct } from './edit/edit-product';
+export { Main } from './main/main';
+export { ProductPage } from './product/product-page';

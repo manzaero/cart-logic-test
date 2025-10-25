@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../store';
 
 const Wrapper = styled.div`
-  max-width: 600px;
+  max-width: 1000px;
   margin: 40px auto;
   padding: 20px;
   border: 1px solid #ddd;
@@ -20,6 +20,15 @@ const Button = styled.button`
   border: 1px solid #ccc;
   cursor: pointer;
 `;
+const Title = styled.h4`
+  margin-bottom: 8px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  height: 2.8em;
+`;
 
 export const ProductPage: React.FC = () => {
     const { id } = useParams();
@@ -31,7 +40,7 @@ export const ProductPage: React.FC = () => {
 
     return (
         <Wrapper>
-            <h2>{product.name}</h2>
+            <Title>{product.name}</Title>
             <p><b>Цена:</b> ${product.price}</p>
             <p><b>Описание:</b> {product.description || 'Описание отсутствует'}</p>
             <Button onClick={() => navigate('/')}>Назад</Button>

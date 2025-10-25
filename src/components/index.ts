@@ -1,2 +1,2 @@
-export * from './card/card'
-export * from './product-card/product-card'
+export {Card} from './card/card';
+export {ProductCard} from './product-card/product-card';

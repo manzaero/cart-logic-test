@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { ProductCard } from '../product-card/product-card.tsx';
+import { ProductCard } from '../product-card/product-card';
 
 interface Product {
     id: number;

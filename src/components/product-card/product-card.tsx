@@ -73,6 +73,19 @@ const Button = styled.button<{ active?: boolean }>`
   cursor: pointer;
 `;
 
+const Title = styled.h4`
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-bottom: 8px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  height: 2.8em;
+`;
+
+
 export const ProductCard: React.FC<ProductCardProps> = ({
                                                             product,
                                                             onDelete,
@@ -89,7 +102,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
     return (
         <CardContainer onClick={handleCardClick}>
-            <h4>{product.name}</h4>
+            <Title>{product.name}</Title>
             <Text>{product.description || 'Описание отсутствует'}</Text>
             <p>${product.price}</p>
             <ButtonsWrapper>
