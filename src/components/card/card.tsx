@@ -60,7 +60,7 @@ export const Card: React.FC<CardProps> = ({ name, products }) => {
         if (product) {
             dispatch(
                 cart.some(item => item.id === id)
-                    ? removeFromCart(product)
+                    ? removeFromCart(product.id)
                     : addToCart(product)
             );
         }
