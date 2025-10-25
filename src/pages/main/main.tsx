@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import {Card, SearchInput} from '../../components/';
-import { useDispatch, useSelector } from 'react-redux';
-import { type RootState, type AppDispatch, setLocation } from '../../store';
+import { Card, SearchInput } from '../../components/';
+import { useSelector } from 'react-redux';
+import { type RootState } from '../../store';
 import { useNavigate } from 'react-router-dom';
+import { useProductsLoader } from '../../hooks/useProductsLoader';
 
 const MainWrapper = styled.div`
     max-width: 1200px;
@@ -35,13 +36,14 @@ const PageButton = styled.button<{ $active?: boolean }>`
 `;
 
 export const Main: React.FC = () => {
-    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const products = useSelector((state: RootState) => state.products.products) || [];
 
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 3;
+
+    useProductsLoader();
 
     const filtered = products.filter(p =>
         p.name.toLowerCase().includes(search.toLowerCase())
@@ -50,25 +52,6 @@ export const Main: React.FC = () => {
     const totalPages = Math.ceil(filtered.length / productsPerPage);
     const startIndex = (currentPage - 1) * productsPerPage;
     const currentProducts = filtered.slice(startIndex, startIndex + productsPerPage);
-
-    useEffect(() => {
-        const fetchLocation = async () => {
-            try {
-                const res = await fetch(
-                    'https://api.ipstack.com/check?access_key=03bd356618ad119f488d97755da685f3&format=1'
-                );
-                const data = await res.json();
-                const location = {
-                    country_code: data.country_code || 'US',
-                    city: data.city || 'Unknown',
-                };
-                dispatch(setLocation(location));
-            } catch {
-                dispatch(setLocation({ country_code: 'US', city: 'New York' }));
-            }
-        };
-        fetchLocation();
-    }, [dispatch]);
 
     return (
         <MainWrapper>
@@ -80,7 +63,7 @@ export const Main: React.FC = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Поиск продукта..."
             />
-            <Card title="Продукты" products={currentProducts} />
+            <Card name="Продукты" products={currentProducts} />
             <div>Всего продуктов: {filtered.length}</div>
             <PaginationWrapper>
                 {Array.from({ length: totalPages }, (_, i) => (

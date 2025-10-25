@@ -5,7 +5,7 @@ import { type RootState, type AppDispatch, addToCart, removeFromCart, removeProd
 import { ProductCard } from '../product-card/product-card';
 
 interface CardProps {
-    title: string;
+    name: string;
     products: Product[];
 }
 
@@ -41,7 +41,7 @@ const FilterButton = styled.button.withConfig({
     cursor: pointer;
 `;
 
-export const Card: React.FC<CardProps> = ({ title, products }) => {
+export const Card: React.FC<CardProps> = ({ name, products }) => {
     const dispatch = useDispatch<AppDispatch>();
     const cart = useSelector((state: RootState) => state.products.cart) || [];
     const [filter, setFilter] = useState<'all' | 'favorites'>('all');
@@ -68,7 +68,7 @@ export const Card: React.FC<CardProps> = ({ title, products }) => {
 
     return (
         <CardWrapper>
-            <h3>{title}</h3>
+            <h3>{name}</h3>
             <FilterButtons>
                 <FilterButton active={filter === 'all'} onClick={() => setFilter('all')}>
                     Все

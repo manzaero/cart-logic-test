@@ -4,7 +4,7 @@ import { CreateProduct } from '../../components/';
 export const CreateProductPage: React.FC = () => {
     return (
         <div>
-            <CreateProduct title="Добавить продукт" />
+            <CreateProduct name="Добавить продукт" />
         </div>
     );
 };

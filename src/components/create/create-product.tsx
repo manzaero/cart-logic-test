@@ -5,7 +5,7 @@ import { addProduct, type AppDispatch } from '../../store';
 import { useNavigate } from 'react-router-dom';
 
 interface CreateProductProps {
-    title: string;
+    initialName?: string;
 }
 
 const Wrapper = styled.div`
@@ -45,10 +45,10 @@ const Error = styled.p`
     font-size: 14px;
 `;
 
-export const CreateProduct: React.FC<CreateProductProps> = ({ title }) => {
+export const CreateProduct: React.FC<CreateProductProps> = ({ initialName = '' }) => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const [name, setName] = useState('');
+    const [name, setName] = useState(initialName);
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [error, setError] = useState('');
@@ -64,7 +64,6 @@ export const CreateProduct: React.FC<CreateProductProps> = ({ title }) => {
             setError('Цена должна быть положительным числом');
             return;
         }
-
         dispatch(
             addProduct({
                 id: Date.now(),
@@ -73,13 +72,12 @@ export const CreateProduct: React.FC<CreateProductProps> = ({ title }) => {
                 description,
             })
         );
-
         navigate('/');
     };
 
     return (
         <Wrapper>
-            <h2>{title}</h2>
+            <h2>Создание продукта</h2>
             <form onSubmit={handleSubmit}>
                 <Input
                     placeholder="Название"
