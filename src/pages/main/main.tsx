@@ -49,7 +49,7 @@ export const Main: React.FC = () => {
 
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const productsPerPage = 4;
+    const productsPerPage = 3;
 
     const filtered = products.filter(p =>
         p.name.toLowerCase().includes(search.toLowerCase())

@@ -4,7 +4,7 @@ import {CreateProduct, EditProduct, Main, ProductPage,} from "./pages";
 
 export const App: React.FC = () => {
     return (
-        <Router>
+        <Router basename="/cart-logic-test">
             <Routes>
                 <Route path="/" element={<Main />} />
                 <Route path="/products/:id" element={<ProductPage />} />
