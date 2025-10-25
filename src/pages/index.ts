@@ -1,4 +1,4 @@
-export { CreateProduct } from './create/create-product';
-export { EditProduct } from './edit/edit-product';
 export { Main } from './main/main';
-export { ProductPage } from './product/product-page';
+export { CreateProductPage } from './new-product/new-product';
+export { ProductPage } from './product-page/product-page';
+export { EditPage } from './edit-product/edit-product';

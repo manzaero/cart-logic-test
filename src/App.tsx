@@ -1,6 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import {CreateProduct, EditProduct, Main, ProductPage,} from "./pages";
+import {
+    Main,
+    CreateProductPage,
+    ProductPage,
+    EditPage
+} from "./pages";
 
 export const App: React.FC = () => {
     return (
@@ -8,8 +13,8 @@ export const App: React.FC = () => {
             <Routes>
                 <Route path="/" element={<Main />} />
                 <Route path="/products/:id" element={<ProductPage />} />
-                <Route path="/create-product" element={<CreateProduct title="Создать продукт" />} />
-                <Route path="/edit-product/:id" element={<EditProduct />} />
+                <Route path="/create-product" element={<CreateProductPage/>} />
+                <Route path="/edit-product/:id" element={<EditPage />} />
             </Routes>
         </Router>
     );

@@ -1,79 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { type RootState, type AppDispatch, addToCart, removeFromCart, removeProduct } from '../../store';
 import { ProductCard } from '../product-card/product-card';
-
-interface Product {
-    id: number;
-    name: string;
-    price: number;
-    description?: string;
-}
 
 interface CardProps {
     title: string;
-    products?: Product[];
+    products: Product[];
 }
 
 const CardWrapper = styled.div`
-  background-color: #f5f5f5;
-  padding: 16px;
-  border-radius: 8px;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    background-color: #f5f5f5;
+    padding: 16px;
+    border-radius: 8px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const ProductsGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 `;
 
 const FilterButtons = styled.div`
-  margin-bottom: 12px;
-  display: flex;
-  gap: 10px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 10px;
 `;
 
-const FilterButton = styled.button<{ active?: boolean }>`
-  padding: 6px 12px;
-  border-radius: 4px;
-  border: 1px solid ${({ active }) => (active ? '#333' : '#ccc')};
-  background-color: ${({ active }) => (active ? '#ddd' : '#f9f9f9')};
-  cursor: pointer;
+const FilterButton = styled.button.withConfig({
+    shouldForwardProp: (prop) => prop !== 'active',
+})<{ active?: boolean }>`
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid ${({ active }) => (active ? '#333' : '#ccc')};
+    background-color: ${({ active }) => (active ? '#ddd' : '#f9f9f9')};
+    cursor: pointer;
 `;
 
-export const Card: React.FC<CardProps> = ({ title, products = [] }) => {
-    const [productList, setProductList] = useState(products);
-    const [likedIds, setLikedIds] = useState<number[]>(() => {
-        const saved = localStorage.getItem('likedIds');
-        return saved ? JSON.parse(saved) : [];
-    });
+export const Card: React.FC<CardProps> = ({ title, products }) => {
+    const dispatch = useDispatch<AppDispatch>();
+    const cart = useSelector((state: RootState) => state.products.cart) || [];
     const [filter, setFilter] = useState<'all' | 'favorites'>('all');
-
-    useEffect(() => {
-        setProductList(products);
-    }, [products]);
-
-    useEffect(() => {
-        localStorage.setItem('likedIds', JSON.stringify(likedIds));
-    }, [likedIds]);
-
-    const handleDelete = (id: number) => {
-        setProductList(prev => prev.filter(p => p.id !== id));
-    };
-
-    const handleToggleLike = (id: number) => {
-        setLikedIds(prev =>
-            prev.includes(id) ? prev.filter(likeId => likeId !== id) : [...prev, id]
-        );
-    };
 
     const displayedProducts =
         filter === 'favorites'
-            ? productList.filter(p => likedIds.includes(p.id))
-            : productList;
+            ? products.filter(p => cart.some(item => item.id === p.id))
+            : products;
+
+    const handleDelete = (id: number) => {
+        dispatch(removeProduct(id));
+    };
+
+    const handleToggleLike = (id: number) => {
+        const product = products.find(p => p.id === id);
+        if (product) {
+            dispatch(
+                cart.some(item => item.id === id)
+                    ? removeFromCart(product)
+                    : addToCart(product)
+            );
+        }
+    };
 
     return (
         <CardWrapper>
@@ -95,7 +86,7 @@ export const Card: React.FC<CardProps> = ({ title, products = [] }) => {
                         <ProductCard
                             key={product.id}
                             product={product}
-                            liked={likedIds.includes(product.id)}
+                            liked={cart.some(item => item.id === product.id)}
                             onDelete={handleDelete}
                             onToggleLike={handleToggleLike}
                         />

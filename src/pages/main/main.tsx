@@ -1,51 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Card } from '../../components';
+import {Card, SearchInput} from '../../components/';
 import { useDispatch, useSelector } from 'react-redux';
-import { type RootState, setLocation } from '../../store';
+import { type RootState, type AppDispatch, setLocation } from '../../store';
 import { useNavigate } from 'react-router-dom';
 
 const MainWrapper = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 `;
 
 const CreateButton = styled.button<{ $active?: boolean }>`
-  padding: 6px 12px;
-  border-radius: 4px;
-  border: 1px solid ${({ $active }) => ($active ? '#333' : '#ccc')};
-  background-color: ${({ $active }) => ($active ? '#ddd' : '#f9f9f9')};
-  cursor: pointer;
-  margin: 4px 0 16px;
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 16px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid ${({ $active }) => ($active ? '#333' : '#ccc')};
+    background-color: ${({ $active }) => ($active ? '#ddd' : '#f9f9f9')};
+    cursor: pointer;
+    margin: 4px 0 16px;
 `;
 
 const PaginationWrapper = styled.div`
-  margin-top: 16px;
-  display: flex;
-  gap: 8px;
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
 `;
 
 const PageButton = styled.button<{ $active?: boolean }>`
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: ${({ $active }) => ($active ? '2px solid #000' : '1px solid #ccc')};
-  background: ${({ $active }) => ($active ? '#eee' : '#fff')};
-  cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: ${({ $active }) => ($active ? '2px solid #000' : '1px solid #ccc')};
+    background: ${({ $active }) => ($active ? '#eee' : '#fff')};
+    cursor: pointer;
 `;
 
 export const Main: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const products = useSelector((state: RootState) => state.products);
+    const products = useSelector((state: RootState) => state.products.products) || [];
 
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -84,10 +76,9 @@ export const Main: React.FC = () => {
                 Создать продукт
             </CreateButton>
             <SearchInput
-                type="text"
-                placeholder="Поиск продукта..."
                 value={search}
-                onChange={e => setSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Поиск продукта..."
             />
             <Card title="Продукты" products={currentProducts} />
             <div>Всего продуктов: {filtered.length}</div>

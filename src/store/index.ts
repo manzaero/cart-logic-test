@@ -19,7 +19,17 @@ interface State {
 }
 
 const savedProducts = localStorage.getItem('products');
-const initialProducts = savedProducts ? JSON.parse(savedProducts) : [];
+let initialProducts: Product[] = [];
+try {
+    if (savedProducts) {
+        const parsed = JSON.parse(savedProducts);
+        if (Array.isArray(parsed) && parsed.every(p => typeof p === 'object' && 'id' in p && 'name' in p && 'price' in p)) {
+            initialProducts = parsed;
+        }
+    }
+} catch (e) {
+    console.error('Ошибка при парсинге products из localStorage:', e);
+}
 
 const initialState: State = {
     products: initialProducts,
@@ -67,7 +77,7 @@ const productsSlice = createSlice({
             if (index !== -1) {
                 state.products[index] = action.payload;
             }
-        }
+        },
     },
 });
 
@@ -75,8 +85,10 @@ export const { setLocation, addToCart, removeFromCart, addProduct, removeProduct
     productsSlice.actions;
 
 export const store = configureStore({
-    reducer: productsSlice.reducer,
+    reducer: {
+        products: productsSlice.reducer,
+    },
 });
 
-export type RootState = ReturnType<typeof productsSlice.reducer>;
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
